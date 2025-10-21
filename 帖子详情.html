@@ -1,0 +1,446 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帖子详情 - 我的论坛</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #87CEEB 0%, #1E90FF 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 容器样式 */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            min-height: calc(100vh - 40px);
+        }
+
+        /* 头部样式 */
+        .header {
+            background: linear-gradient(135deg, #1E90FF 0%, #4169E1 100%);
+            color: white;
+            padding: 30px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .header::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.1"><path fill="white" d="M20,20 L80,20 L80,80 L20,80 Z"/></svg>');
+            }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .back-btn:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: translateY(-2px);
+            }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            padding: 40px;
+        }
+
+        /* 帖子详情样式 */
+        .post-detail {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .post-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .post-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            line-height: 1.4;
+            margin-bottom: 15px;
+            word-wrap: break-word;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 25px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+            .post-meta span {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+        .post-content {
+            padding: 35px 30px;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #495057;
+        }
+
+            .post-content h1, .post-content h2, .post-content h3 {
+                margin: 25px 0 15px 0;
+                color: #2c3e50;
+            }
+
+            .post-content p {
+                margin: 15px 0;
+            }
+
+            .post-content ul, .post-content ol {
+                margin: 15px 0;
+                padding-left: 30px;
+            }
+
+            .post-content li {
+                margin: 8px 0;
+            }
+
+            .post-content blockquote {
+                border-left: 4px solid #1E90FF;
+                margin: 20px 0;
+                padding: 15px 20px;
+                background: #f8f9fa;
+                color: #555;
+                font-style: italic;
+                border-radius: 0 8px 8px 0;
+            }
+
+            .post-content code {
+                background: #f1f3f4;
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-family: 'Courier New', monospace;
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                background: #2d3748;
+                color: #e2e8f0;
+                padding: 20px;
+                border-radius: 8px;
+                overflow-x: auto;
+                margin: 20px 0;
+            }
+
+            .post-content img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 8px;
+                margin: 15px 0;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .post-content a {
+                color: #1E90FF;
+                text-decoration: none;
+            }
+
+                .post-content a:hover {
+                    text-decoration: underline;
+                }
+
+        /* 加载和错误状态 */
+        .loading, .error {
+            padding: 60px 30px;
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .error {
+            color: #d93025;
+            background: #fde8e8;
+            border: 1px solid #f5b5b5;
+        }
+
+        .loading::before {
+            content: "⏳ ";
+            font-size: 24px;
+        }
+
+        .error::before {
+            content: "❌ ";
+            font-size: 24px;
+        }
+
+        /* 操作按钮区域 */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            padding: 0 30px 30px;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .action-btn.like {
+                background: #ff4757;
+                color: white;
+            }
+
+            .action-btn.comment {
+                background: #1E90FF;
+                color: white;
+            }
+
+            .action-btn.share {
+                background: #f0f0f0;
+                color: #555;
+            }
+
+            .action-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .post-header {
+                padding: 20px;
+            }
+
+            .post-title {
+                font-size: 22px;
+            }
+
+            .post-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .post-content {
+                padding: 25px 20px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                padding: 0 20px 20px;
+            }
+        }
+
+        /* 动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .post-detail {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .action-buttons {
+            animation: fadeInUp 0.8s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="nav-bar">
+                <a href="主页.html" class="back-btn">← 返回主页</a>
+                <div class="page-title">帖子详情</div>
+                <div style="width: 100px;"></div> <!-- 占位用于平衡布局 -->
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div id="post">
+                <div class="loading">正在加载帖子内容...</div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn like">
+                    <span>👍</span> 点赞
+                </button>
+                <button class="action-btn comment">
+                    <span>💬</span> 评论
+                </button>
+                <button class="action-btn share">
+                    <span>📤</span> 分享
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script language="javascript" type="text/javascript">
+        const API_BASE_URL = window.location.origin;
+
+        // 页面加载时执行
+        document.addEventListener("DOMContentLoaded", function () {
+            loadPostDetail();
+        });
+
+        // 获取参数中的ID
+        function get_id() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get("id");
+            if (id) {
+                return parseInt(id);
+            } else {
+                return null;
+            }
+        }
+
+        // 格式化时间
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) {
+                return '刚刚';
+            } else if (diffMins < 60) {
+                return `${diffMins}分钟前`;
+            } else if (diffHours < 24) {
+                return `${diffHours}小时前`;
+            } else if (diffDays < 7) {
+                return `${diffDays}天前`;
+            } else {
+                return date.toLocaleDateString('zh-CN') + ' ' + date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+            }
+        }
+
+        // 加载帖子详情
+        async function loadPostDetail() {
+            const id = get_id();
+            const post = document.getElementById('post');
+
+            if (!id) {
+                post.innerHTML = `
+                    <div class='error'>
+                        ❌ 缺少帖子ID参数，无法加载帖子内容
+                    </div>
+                    `;
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/app/posts/${id}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    displayPost(result.data);
+                } else {
+                    post.innerHTML = `
+                            <div class="error">
+                                ❌ 加载失败: ${result.message}
+                            </div>
+                        `;
+                }
+            } catch (e) {
+                console.error('加载帖子详情失败:', e);
+                post.innerHTML = `
+                        <div class="error">
+                            ❌ 网络错误，请检查后端服务
+                        </div>
+                    `;
+            }
+        }
+
+        // 显示帖子内容
+        function displayPost(postData) {
+            const post = document.getElementById('post');
+
+            post.innerHTML = `
+                    <pre>
+                    <div class="post-detail">
+                        <div class="post-header">
+                            <div class="post-title">${postData.title}</div>
+                            <div class="post-meta">
+                                <span>👤 作者: ${postData.author_name}</span>
+                                <span>🕐 发布时间: ${formatTime(postData.created_at)}</span>
+                            </div>
+                        </div>
+                        <div class="post-content">${postData.content}</div>
+                    </div>
+                    </pre>
+                `;
+        }
+    </script>
+</body>
+</html>

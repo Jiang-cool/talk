@@ -1,0 +1,443 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发表新帖子 - 我的论坛</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #87CEEB 0%, #1E90FF 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 容器样式 */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            min-height: calc(100vh - 40px);
+        }
+
+        /* 头部样式 */
+        .header {
+            background: linear-gradient(135deg, #1E90FF 0%, #4169E1 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .header::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.1"><path fill="white" d="M20,20 L80,20 L80,80 L20,80 Z"/></svg>');
+            }
+
+            .header h1 {
+                font-size: 36px;
+                margin-bottom: 15px;
+                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .header p {
+                font-size: 18px;
+                opacity: 0.9;
+                position: relative;
+            }
+
+        /* 用户信息区域 */
+        .user-info {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+            .user-info #user {
+                font-size: 16px;
+                font-weight: 600;
+                color: #444;
+            }
+
+            .user-info a {
+                color: #1E90FF;
+                text-decoration: none;
+                transition: all 0.3s;
+            }
+
+                .user-info a:hover {
+                    color: #0066CC;
+                    text-decoration: underline;
+                }
+
+        /* 主要内容区域 */
+        .main-content {
+            padding: 40px;
+        }
+
+        /* 发帖表单样式 */
+        .post-form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 表单组样式 */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 10px;
+                font-weight: 600;
+                color: #444;
+                font-size: 16px;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                width: 100%;
+                padding: 15px;
+                border: 2px solid #ddd;
+                border-radius: 10px;
+                font-size: 16px;
+                transition: all 0.3s;
+                resize: vertical;
+            }
+
+                .form-group input:focus,
+                .form-group textarea:focus {
+                    border-color: #1E90FF;
+                    box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2);
+                    outline: none;
+                }
+
+            .form-group input {
+                height: 50px;
+            }
+
+            .form-group textarea {
+                min-height: 300px;
+                line-height: 1.6;
+            }
+
+        /* 按钮组样式 */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: #1E90FF;
+            color: white;
+        }
+
+            .btn-primary:hover {
+                background: #0066CC;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(30, 144, 255, 0.3);
+            }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #555;
+        }
+
+            .btn-secondary:hover {
+                background: #e0e0e0;
+            }
+
+        /* 消息样式 */
+        #message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .message.success {
+            background: #e6f7ee;
+            color: #009944;
+            border: 1px solid #a3e9c1;
+        }
+
+        .message.error {
+            background: #fde8e8;
+            color: #d93025;
+            border: 1px solid #f5b5b5;
+        }
+
+        .message.loading {
+            background: #e6f3ff;
+            color: #1E90FF;
+            border: 1px solid #a3d0ff;
+        }
+
+        /* 字符计数 */
+        .char-count {
+            text-align: right;
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+            .char-count.warning {
+                color: #ff6b35;
+            }
+
+            .char-count.danger {
+                color: #d93025;
+                font-weight: bold;
+            }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header {
+                padding: 30px 20px;
+            }
+
+                .header h1 {
+                    font-size: 28px;
+                }
+
+            .user-info {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .form-group textarea {
+                min-height: 200px;
+            }
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .post-form > * {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .form-group:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .form-group:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .button-group {
+            animation-delay: 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 发表新帖子</h1>
+            <p>分享你的想法和问题</p>
+        </div>
+
+        <div class="user-info">
+            <div id="user">👤 加载中...</div>
+        </div>
+
+        <div class="main-content">
+            <div class="post-form">
+                <div id="message" class="message"></div>
+
+                <div class="form-group">
+                    <label for="title">帖子标题：</label>
+                    <input type="text" id="title" placeholder="请输入帖子标题（最多100字）" maxlength="100">
+                    <div class="char-count" id="titleCount">0/100</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">帖子内容：</label>
+                    <textarea id="content" placeholder="请输入帖子内容..."></textarea>
+                    <div class="char-count" id="contentCount">0 字</div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="submitPost()">发布帖子</button>
+                    <button class="btn btn-secondary" onclick="location.href='主页.html'">返回主页</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script language="javascript" type="text/javascript">
+        const API_BASE_URL = window.location.origin;
+
+        // 页面加载时执行
+        document.addEventListener('DOMContentLoaded', function () {
+            loadUser();
+            setupCharCounters();
+        });
+
+        // 加载用户信息
+        function loadUser() {
+            const username = localStorage.getItem('username');
+            const div = document.getElementById('user');
+
+            if (username) {
+                div.innerHTML = `👤 ${username} | <a href="登录.html">退出</a>`;
+            } else {
+                location.href = '登录.html';
+                return;
+            }
+        }
+
+        // 设置字符计数器
+        function setupCharCounters() {
+            const titleInput = document.getElementById('title');
+            const contentInput = document.getElementById('content');
+            const titleCount = document.getElementById('titleCount');
+            const contentCount = document.getElementById('contentCount');
+
+            titleInput.addEventListener('input', function() {
+                const count = this.value.length;
+                titleCount.textContent = `${count}/100`;
+
+                if (count > 90) {
+                    titleCount.className = 'char-count warning';
+                } else if (count === 100) {
+                    titleCount.className = 'char-count danger';
+                } else {
+                    titleCount.className = 'char-count';
+                }
+            });
+
+            contentInput.addEventListener('input', function() {
+                const count = this.value.length;
+                contentCount.textContent = `${count} 字`;
+
+                if (count > 500) {
+                    contentCount.className = 'char-count warning';
+                } else if (count > 1000) {
+                    contentCount.className = 'char-count danger';
+                } else {
+                    contentCount.className = 'char-count';
+                }
+            });
+        }
+
+        // 提交帖子
+        async function submitPost() {
+            const title = document.getElementById('title').value.trim();
+            const content = document.getElementById('content').value.trim();
+            const id = localStorage.getItem('id');
+
+            // 验证输入
+            if (!title || !content) {
+                showMessage('❌ 请输入完整的帖子标题和内容', 'error');
+                return;
+            }
+
+            if (title.length > 100) {
+                showMessage('❌ 标题不能超过100个字符', 'error');
+                return;
+            }
+
+            try {
+                showMessage('⏳ 正在发布帖子...', 'loading');
+                const response = await fetch(`${API_BASE_URL}/app/posts`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        content: content,
+                        author_id: parseInt(id)
+                    })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    showMessage('✅ 帖子发布成功！正在跳转...', 'success');
+
+                    // 3秒后跳转到论坛首页
+                    setTimeout(() => {
+                        window.location.href = '主页.html';
+                    }, 3000);
+
+                } else {
+                    showMessage(`❌ 发布失败: ${result.message}`, 'error');
+                }
+            } catch (e) {
+                console.error('发布帖子错误:', e);
+                showMessage('❌ 网络错误，请检查后端服务', 'error');
+            }
+        }
+
+        function showMessage(text, type) {
+            const message = document.getElementById('message');
+            message.innerHTML = text;
+            message.className = `message ${type}`;
+        }
+    </script>
+</body>
+</html>

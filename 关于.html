@@ -1,0 +1,247 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们 - 我的论坛</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #87CEEB 0%, #1E90FF 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* 容器样式 */
+        .container {
+            display: flex;
+            width: 90%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        /* 左侧图片区域 */
+        .image-section {
+            flex: 1;
+            background: linear-gradient(135deg, #1E90FF 0%, #4169E1 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: white;
+            text-align: center;
+        }
+
+            .image-section img {
+                max-width: 80%;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            }
+
+            .image-section h2 {
+                font-size: 28px;
+                margin-bottom: 15px;
+                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            }
+
+            .image-section p {
+                font-size: 16px;
+                line-height: 1.6;
+                opacity: 0.9;
+            }
+
+        /* 右侧内容区域 */
+        .content-section {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+            .content-section h1 {
+                font-size: 32px;
+                margin-bottom: 30px;
+                color: #1E90FF;
+                text-align: center;
+            }
+
+        /* 关于内容样式 */
+        .about-content {
+            margin-bottom: 30px;
+        }
+
+            .about-content p {
+                font-size: 16px;
+                line-height: 1.6;
+                margin-bottom: 15px;
+                color: #555;
+            }
+
+        /* 制作者信息样式 */
+        .creator-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-left: 4px solid #1E90FF;
+        }
+
+            .creator-info h3 {
+                color: #1E90FF;
+                margin-bottom: 15px;
+                font-size: 20px;
+            }
+
+        .creator-detail {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+            .creator-detail .icon {
+                width: 30px;
+                height: 30px;
+                background: #1E90FF;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 10px;
+                color: white;
+                font-size: 14px;
+            }
+
+            .creator-detail .text {
+                font-size: 16px;
+                color: #444;
+            }
+
+                .creator-detail .text a {
+                    color: #1E90FF;
+                    text-decoration: none;
+                    transition: all 0.3s;
+                }
+
+                    .creator-detail .text a:hover {
+                        color: #0066CC;
+                        text-decoration: underline;
+                    }
+
+        /* 返回按钮样式 */
+        .back-btn {
+            display: inline-block;
+            background: #1E90FF;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+            .back-btn:hover {
+                background: #0066CC;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .image-section {
+                padding: 30px 20px;
+            }
+
+            .content-section {
+                padding: 30px 20px;
+            }
+        }
+
+        /* 动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-section > * {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .creator-info {
+            animation-delay: 0.2s;
+        }
+
+        .back-btn {
+            animation-delay: 0.4s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-section">
+            <img src="Gemini_Generated_Image_9zy9xp9zy9xp9zy9.png" alt="论坛图片">
+            <h2>欢迎来到我的论坛！</h2>
+            <p>加入我们的社区，与志同道合的朋友交流分享</p>
+        </div>
+
+        <div class="content-section">
+            <h1>关于我们</h1>
+
+            <div class="about-content">
+                <p>欢迎来到我们的论坛社区！这里是一个开放、友好的交流平台，致力于为用户提供优质的讨论环境。</p>
+                <p>无论您是想分享知识、交流想法，还是寻找志同道合的朋友，这里都将是您的理想选择。</p>
+                <p>我们相信，通过真诚的交流和分享，每个人都能在这里获得成长和快乐。</p>
+            </div>
+
+            <div class="creator-info">
+                <h3>制作者信息</h3>
+                <div class="creator-detail">
+                    <div class="icon">👤</div>
+                    <div class="text">一枚高冷蛋</div>
+                </div>
+                <div class="creator-detail">
+                    <div class="icon">📧</div>
+                    <div class="text">
+                        <a href="mailto:chuang1925@outlook.com">chuang1925@outlook.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <a href="登录.html" class="back-btn">返回主页</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,397 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>论坛主页</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #87CEEB 0%, #1E90FF 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        /* 容器样式 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            min-height: calc(100vh - 40px);
+        }
+
+
+        
+        /* 头部样式 */
+        .header {
+            background: linear-gradient(135deg, #1E90FF 0%, #4169E1 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.1"><path fill="white" d="M20,20 L80,20 L80,80 L20,80 Z"/></svg>');
+        }
+        
+        .header h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        /* 用户信息区域 */
+        .user-info {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .user-info #user {
+            font-size: 16px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        .user-info a {
+            color: #1E90FF;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .user-info a:hover {
+            color: #0066CC;
+            text-decoration: underline;
+        }
+        
+        /* 主要内容区域 */
+        .main-content {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        /* 发帖按钮 */
+        .new-posts-btn {
+            align-self: flex-end;
+            background: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(30, 144, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .new-posts-btn:hover {
+            background: #0066CC;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(30, 144, 255, 0.4);
+        }
+        
+        /* 帖子列表区域 */
+        .posts-list {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .posts-list h2 {
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            padding: 20px 25px;
+            margin: 0;
+            color: #444;
+            font-size: 22px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .posts-container {
+            padding: 0;
+        }
+        
+        /* 帖子项样式 */
+        .post-item {
+            padding: 20px 25px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .post-item:hover {
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+        
+        .post-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            line-height: 1.4;
+        }
+        
+        .post-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .post-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* 加载状态 */
+        .loading {
+            padding: 40px 25px;
+            text-align: center;
+            color: #666;
+            font-size: 16px;
+        }
+        
+        /* 空状态 */
+        .empty-state {
+            padding: 60px 25px;
+            text-align: center;
+            color: #888;
+        }
+        
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .empty-state p {
+            font-size: 16px;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 32px;
+            }
+            
+            .user-info {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .new-posts-btn {
+                align-self: stretch;
+                justify-content: center;
+            }
+            
+            .post-item {
+                padding: 15px 20px;
+            }
+            
+            .post-meta {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .post-item {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .post-item:nth-child(1) { animation-delay: 0.1s; }
+        .post-item:nth-child(2) { animation-delay: 0.2s; }
+        .post-item:nth-child(3) { animation-delay: 0.3s; }
+        .post-item:nth-child(4) { animation-delay: 0.4s; }
+        .post-item:nth-child(5) { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>欢迎来到论坛</h1>
+            <p>加入我们的社区，与志同道合的朋友交流分享</p>
+        </div>
+
+        <div class="user-info">
+            <div id="user">👤 加载中...</div>
+        </div>
+
+        <div class="main-content">
+            <button class="new-posts-btn" onclick="location.href='发帖.html'">
+                📝 发表新帖子
+            </button>
+
+            <div class="posts-list">
+                <h2>📋 最新帖子</h2>
+                <div class="posts-container" id="postList">
+                    <div class="loading">正在加载帖子...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script language="javascript">
+        const API_BASE_URL = window.location.origin;
+
+        // 页面加载时执行
+        document.addEventListener('DOMContentLoaded', function () {
+            loadUser();
+            loadPosts();
+        });
+
+        // 加载用户信息
+        function loadUser() {
+            const username = localStorage.getItem('username');
+            const div = document.getElementById('user');
+
+            if (username) {
+                div.innerHTML = `👤 ${username} | <a href="登录.html">退出</a>`;
+            } else {
+                location.href = '登录.html';
+                return;
+            }
+        }
+
+        // 加载帖子
+        async function loadPosts() {
+            const postContainer = document.getElementById('postList');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/app/posts`);
+                const result = await response.json();
+
+                if (result.success && result.data.length > 0) {
+                    displayPosts(result.data);
+                } else {
+                    postContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">📝</div>
+                            <h3>还没有帖子</h3>
+                            <p>快来发表第一个帖子，开启社区讨论吧！</p>
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                console.error('加载帖子失败', e);
+                postContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">⚠️</div>
+                        <h3>无法加载帖子</h3>
+                        <p>请检查网络连接或稍后再试</p>
+                    </div>
+                `;
+            }
+
+            // 显示帖子列表
+            function displayPosts(posts) {
+                postContainer.innerHTML = posts.map(post => `
+                    <div class="post-item" onclick="viewPost(${post.id})">
+                        <div class="post-title">${post.title}</div>
+                        <div class="post-meta">
+                            <span>👤 ${post.author_name}</span>
+                            <span>🕐 ${formatTime(post.created_at)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 查看帖子详情
+        function viewPost(postId) {
+            window.location.href = `帖子详情.html?id=${postId}`;
+        }
+
+        // 格式化时间
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) {
+                return '刚刚';
+            } else if (diffMins < 60) {
+                return `${diffMins}分钟前`;
+            } else if (diffHours < 24) {
+                return `${diffHours}小时前`;
+            } else if (diffDays < 7) {
+                return `${diffDays}天前`;
+            } else {
+                return date.toLocaleDateString('zh-CN');
+            }
+        }
+    </script>
+</body>
+</html>
