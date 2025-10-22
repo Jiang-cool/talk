@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "*.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "**/*.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*\\.html)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/app/(.*)",
+      "dest": "/api/app.py"
+    },
+    {
+      "src": "/$",
+      "dest": "/登录.html"
+    }
+  ]
+}
