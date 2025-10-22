@@ -404,3 +404,7 @@ if __name__ == '__main__':
     
     # 启动Flask应用
     app.run(debug=False, port=port, host='0.0.0.0')
+else:
+    # 这是给 Vercel 使用的
+    print("🔧 Vercel 环境初始化...")
+    init_db()
