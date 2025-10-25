@@ -107,16 +107,12 @@ def init_db():
         if user_count == 0:
             if os.environ.get('DATABASE_URL'):
                 # PostgreSQL 插入
-                cursor.execute('INSERT INTO users (name, password) VALUES (%s, %s)', 
-                             ('示例用户', '123456'))
                 cursor.execute('INSERT INTO posts (title, content, author_id) VALUES (%s, %s, %s)',
-                             ('欢迎来到论坛！', '这是第一个示例帖子，欢迎大家一起交流！', 1))
+                             ('欢迎来到论坛！', '这是一个欢迎帖子，欢迎大家一起交流！\n我是论坛的作者，这个论坛是我一手操办的。\n这里我就不多说了，愿大家使用快乐！\n如发现有问题或建议，可当面通知，亦可通过关于页面的电子邮箱向我发送邮件。\n愿大家常怀感恩之心，努力学习，报效祖国！\n  作者致辞', 1))
             else:
                 # SQLite 插入
-                cursor.execute('INSERT INTO users (name, password) VALUES (?, ?)', 
-                             ('示例用户', '123456'))
                 cursor.execute('INSERT INTO posts (title, content, author_id) VALUES (?, ?, ?)',
-                             ('欢迎来到论坛！', '这是第一个示例帖子，欢迎大家一起交流！', 1))
+                             ('欢迎来到论坛！', '这是一个欢迎帖子，欢迎大家一起交流！\n我是论坛的作者，这个论坛是我一手操办的。\n这里我就不多说了，愿大家使用快乐！\n如发现有问题或建议，可当面通知，亦可通过关于页面的电子邮箱向我发送邮件。\n愿大家常怀感恩之心，努力学习，报效祖国！\n  作者致辞', 1))
             
             conn.commit()
             print("✅ 示例数据添加成功")
